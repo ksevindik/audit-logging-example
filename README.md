@@ -132,7 +132,7 @@ Discarding threshold:    0
 Never block:             false
 Immediate flush:         true
 Fsync enabled:           true
-File:                    /tmp/logging-benchmark/spring.log
+File:                    /tmp/logging-benchmark/audit.log
 Max file size:           500.00 MB
 Max history:             30
 ```

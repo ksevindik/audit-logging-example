@@ -52,7 +52,7 @@ abstract class BaseAsyncLoggingBenchmarkTest {
         .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
 
     private val logFile: Path
-        get() = LOG_DIR.resolve("spring.log")
+        get() = LOG_DIR.resolve("audit.log")
 
     @BeforeEach
     fun setup() {
@@ -178,7 +178,7 @@ abstract class BaseAsyncLoggingBenchmarkTest {
 
     private fun countMessagesInLogFiles(messagePrefix: String): Int {
         val allLogFiles = Files.list(LOG_DIR)
-            .filter { it.fileName.toString().startsWith("spring.log") }
+            .filter { it.fileName.toString().startsWith("audit.log") }
             .toList()
 
         printLogFileSummary(allLogFiles)

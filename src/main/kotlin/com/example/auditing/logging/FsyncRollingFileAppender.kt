@@ -12,9 +12,6 @@ import java.io.FileOutputStream
  * Configuration options:
  * - fsyncEnabled: Enable/disable fsync (default: true)
  *
- * Note: fsync is slow (~1-10ms per call). Consider using this appender
- * behind an AsyncAppender to avoid blocking application threads.
- *
  * Example configuration:
  * ```xml
  * <appender name="FSYNC_FILE" class="com.example.auditing.logging.FsyncRollingFileAppender">
@@ -36,7 +33,11 @@ class FsyncRollingFileAppender<E> : RollingFileAppender<E>() {
      */
     var fsyncEnabled: Boolean = true
 
-    private var lastFsyncTime: Long = 0
+    val fosField = ReflectionUtils.findField(ResilientFileOutputStream::class.java,"fos")
+
+    init {
+        fosField!!.trySetAccessible()
+    }
 
     override fun subAppend(event: E) {
         super.subAppend(event)
@@ -54,12 +55,10 @@ class FsyncRollingFileAppender<E> : RollingFileAppender<E>() {
                 os.fd.sync()
             } else if (os is ResilientFileOutputStream) {
                 os.flush()
-                val fosField = ReflectionUtils.findField(ResilientFileOutputStream::class.java,"fos")
-                fosField!!.trySetAccessible()
-                val fos = fosField.get(os) as FileOutputStream
+                val fos = fosField!!.get(os) as FileOutputStream
                 fos.fd.sync()
             } else {
-                throw IllegalStateException("fysnc enabled but type of the OutputStream is not expected ${os.javaClass}")
+                throw IllegalStateException("Type of the OutputStream is not expected for fsync :${os.javaClass}")
             }
         } catch (e: Exception) {
             addError("Failed to fsync log file", e)

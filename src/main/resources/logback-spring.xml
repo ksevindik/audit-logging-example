@@ -2,7 +2,7 @@
 <configuration debug="true">
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
-    <property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}/}/spring.log}"/>
+    <property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}/}/audit.log}"/>
     
     <!-- Target appender for async wrappers: ROLLING_FILE or CONSOLE -->
     <property name="TARGET_APPENDER" value="ROLLING_FILE"/>
